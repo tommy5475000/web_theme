@@ -16,6 +16,7 @@ import { TableNoData } from "src/sections/user/table-no-data";
 import { TableEmptyRows } from "src/sections/user/table-empty-rows";
 
 import { ImportXml } from "../importXml";
+import { CreateXml } from "../createXml";
 import { InvoiceTableHead } from "../invoice-table-head";
 import { InvoiceTableToolbar } from "../invoice-table-toolbar";
 import { applyFilterIvn, emptyRows, getComparator, } from "../utils";
@@ -26,8 +27,15 @@ export function InvoiceItView() {
   const table = useTable()
   const [filterName, setFilterName] = useState("")
   const [openImport, setOpenImport] = useState(false)
-  const handleOpen = () => { }
+  const [openCreate, setOpenCreate] = useState(false)
 
+  const handleOpenCreate = () => {
+    setOpenCreate(true)
+  }
+
+  const handleCloseCreate = () => {
+    setOpenCreate(false)
+  }
   const handleOpenImport = () => {
     setOpenImport(true)
   }
@@ -39,7 +47,7 @@ export function InvoiceItView() {
   const { data: dataXml = [] } = useQuery<InvoiceProps[]>({
     queryKey: ["dataXml"],
     queryFn: getInvoiceXlm
-  })  
+  })
 
   const dataFiltered = applyFilterIvn({
     inputData: dataXml,
@@ -63,12 +71,12 @@ export function InvoiceItView() {
           Invoices
         </Typography>
         <ButtonGroup
-          handleOpen={handleOpen}
+          handleOpen={handleOpenCreate}
           handleImport={handleOpenImport}
-          handleExport={()=>handleExportData({
-            data:dataFiltered,
-            fileName:'Invoice IT',
-            columns:headLabel,
+          handleExport={() => handleExportData({
+            data: dataFiltered,
+            fileName: 'Invoice IT',
+            columns: headLabel,
           })}
         />
       </Box >
@@ -158,6 +166,13 @@ export function InvoiceItView() {
         <ImportXml handleClose={handleCloseImport} />
       </ModalManager>
 
+      {/* Modal Create*/}
+      <ModalManager
+        open={openCreate}
+        handleClose={handleCloseCreate}
+      >
+        <CreateXml handleClose={handleCloseCreate}/>
+      </ModalManager>
 
     </DashboardContent >
   );

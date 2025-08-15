@@ -11,12 +11,7 @@ import { showAlert } from "src/components/alert";
 import { itemHinhThucHoaDon } from "src/components/Item/item";
 
 import { widthImport } from "../utils";
-
-
-type ImportXmlProps = {
-
-    handleClose: () => void,
-}
+import { ImportXmlProps } from "./type"; 
 
 export function ImportXml({
     handleClose,
