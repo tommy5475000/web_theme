@@ -18,11 +18,20 @@ import { AnalyticsConversionRates } from '../analytics-conversion-rates';
 
 export function OverviewAnalyticsView() {
   return (
-    <DashboardContent maxWidth="xl">
-      <Typography variant="h4" sx={{ mb: { xs: 3, md: 5 } }}>
+    <DashboardContent maxWidth="xl" sx={{height:700}}>
+      {/* <Typography variant="h4" sx={{ mb: { xs: 3, md: 5 } }}>
         Hi, Welcome back 👋
-      </Typography>
+      </Typography> */}
+      <iframe
+        title="TEST"
+        height="100%"
+        width="100%"
+        src="https://app.powerbi.com/reportEmbed?reportId=63eda998-6c1c-4387-8307-cc477b29df06&autoAuth=true&ctid=d3bc92ff-dd66-40dd-931f-7ef98ed6bedf"
+        frameBorder="0"
+        allowFullScreen
+      />
 
+      {/* 
       <Grid container spacing={3}>
         <Grid size={{ xs: 12, sm: 6, md: 3 }}>
           <AnalyticsWidgetSummary
@@ -150,7 +159,7 @@ export function OverviewAnalyticsView() {
         <Grid size={{ xs: 12, md: 6, lg: 8 }}>
           <AnalyticsTasks title="Tasks" list={_tasks} />
         </Grid>
-      </Grid>
+      </Grid> */}
     </DashboardContent>
   );
 }

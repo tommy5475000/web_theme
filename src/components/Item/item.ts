@@ -52,6 +52,6 @@ export const headLabel = [
   { id: 'noiDung', label: 'Nội Dung' },
   { id: 'tienThue', label: 'Vat' },
   { id: 'tongTien', label: 'Tổng Tiền' },
-  { id: 'loaiHing', label: 'Loại Hình', minWidth: 120 },
+  { id: 'loaiHinh', label: 'Loại Hình', minWidth: 120 },
   { id: '', label: '' },
 ]

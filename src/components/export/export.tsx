@@ -28,5 +28,6 @@ export function handleExportData({ data, fileName, columns }: exportInvProps) {
     // Xuất file
     const excelBuffer = XLSX.write(workbook, { bookType: "xlsx", type: "array" });
     const fileData = new Blob([excelBuffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8" });
-    saveAs(fileData, `${fileName} ${Date()}.xlsx`);
+    const today = new Date().toISOString().slice(0, 10);
+    saveAs(fileData, `${fileName} ${today}.xlsx`);
 }

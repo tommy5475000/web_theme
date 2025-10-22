@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { object, string } from 'yup'
+import { array, object, string } from 'yup'
 import { useForm } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 
 import Grid from '@mui/material/GridLegacy';
 import { Button, DialogActions, DialogContent, DialogTitle, InputLabel, TextField } from "@mui/material";
+import { Add, Delete } from "@mui/icons-material";
 
 import { widthImport } from '../utils';
 import { CreateXmlProps } from "./type";
@@ -24,8 +25,11 @@ const createSchema = object({
         .required('Không để trống tên nhà cung cấp'),
     diaChi: string()
         .required("Không để trống địa chỉ"),
-    noiDung: string()
-        .required("Không để trống nội dung"),
+    // noiDung: string()
+    //     .required("Không để trống nội dung"),
+    item: array().of(
+        object()
+    ),
     donGia: string()
         .required("Không để trống đơn giá")
         .matches(/^\d+$/, "Phải là số"),
@@ -66,7 +70,7 @@ export function CreateXml({ handleClose }: CreateXmlProps) {
         <form>
             <DialogTitle>Create Invoice</DialogTitle>
 
-            <DialogContent>
+            {/* <DialogContent>
                 <Grid
                     container
                     spacing={2}
@@ -116,6 +120,7 @@ export function CreateXml({ handleClose }: CreateXmlProps) {
                     spacing={2}
                     alignItems="center"
                     justifyContent="flex-start"
+                    sx={{ mb: 1 }}
                 >
                     <Grid item xs={5}>
                         <InputLabel> Ngày hóa đơn: </InputLabel>
@@ -138,6 +143,7 @@ export function CreateXml({ handleClose }: CreateXmlProps) {
                     spacing={2}
                     alignItems="center"
                     justifyContent="flex-start"
+                    sx={{ mb: 1 }}
                 >
                     <Grid item xs={5}>
                         <InputLabel>Tên nhà cung cấp:</InputLabel>
@@ -159,6 +165,7 @@ export function CreateXml({ handleClose }: CreateXmlProps) {
                     spacing={2}
                     alignItems='center'
                     justifyContent='flex-start'
+                    sx={{ mb: 1 }}
                 >
                     <Grid item xs={5}>
                         <InputLabel>Địa chỉ: </InputLabel>
@@ -180,6 +187,7 @@ export function CreateXml({ handleClose }: CreateXmlProps) {
                     spacing={2}
                     alignItems='center'
                     justifyContent='flex-start'
+                    sx={{ mb: 1 }}
                 >
                     <Grid item xs={5}>
                         <InputLabel>Nội dung hóa đơn:</InputLabel>
@@ -194,9 +202,150 @@ export function CreateXml({ handleClose }: CreateXmlProps) {
                             helperText={errors.noiDung?.message}
                         />
                     </Grid>
-
                 </Grid>
 
+                <Grid
+                    container
+                    spacing={2}
+                    alignItems='center'
+                    justifyContent='flex-start'
+                    sx={{ mb: 1 }}
+                >
+                    <Grid item xs={5}>
+                        <InputLabel>Số lượng</InputLabel>
+                    </Grid>
+                    <Grid item xs={7}>
+                        <TextField
+                            variant='standard'
+                            sx={{...widthImport}}
+
+                        />
+                    </Grid>
+                </Grid>
+
+            </DialogContent> */}
+            <DialogContent>
+                <Grid
+                    container
+                    spacing={2}
+                    alignItems='center'
+                    justifyContent='flex-start'
+                >
+                    <Grid item xs={7}>
+                        <Grid
+                            container
+                            spacing={3}
+                            alignItems='center'
+                            justifyContent='flex-start'
+                            mb={1}
+                        >
+                            <Grid item xs={5}>
+                                <InputLabel> 
+                                    Nội dung hóa đơn:
+                                </InputLabel>
+                            </Grid>
+
+                        </Grid>
+                    </Grid>
+
+                    <Grid item xs={5}>
+
+                        <Grid
+                            container
+                            spacing={2}
+                            alignItems="center"
+                            justifyContent="flex-start"
+                            sx={{ mb: 1 }}
+                        >
+                            <Grid item xs={5}>
+                                <InputLabel>Số hóa đơn:</InputLabel>
+                            </Grid>
+
+                            <Grid item xs={7} >
+                                <TextField
+                                    sx={{ ...widthImport }}
+                                    variant='standard'
+                                    error={!!errors.soHd}
+                                    {...register("soHd")}
+                                    helperText={errors.soHd?.message}
+                                />
+                            </Grid>
+                        </Grid>
+
+                        <Grid
+                            container
+                            spacing={2}
+                            alignItems='center'
+                            justifyContent='flex-start'
+                            mb={1}
+                        >
+                            <Grid item xs={5}>
+                                <InputLabel>
+                                    Ký hiệu hóa đơn:
+                                </InputLabel>
+                            </Grid>
+                            <Grid item xs={7}>
+                                <TextField
+                                    variant='standard'
+                                    sx={{...widthImport}}
+                                    error={!!errors.kyHieuHd}
+                                    {...register('kyHieuHd')}
+                                    helperText={errors.kyHieuHd?.message}
+                                />
+                            </Grid>
+
+                        </Grid>
+
+                        <Grid
+                            container
+                            spacing={2}
+                            alignItems='center'
+                            justifyContent='flex-start'
+                            mb={1}
+                        >
+                            <Grid item xs={5}>
+                                <InputLabel>
+                                    Tên nhà cung cấp:
+                                </InputLabel>
+                            </Grid>
+
+                            <Grid item xs={7}>
+                                <TextField
+                                    variant='standard'
+                                    sx={{...widthImport}}
+                                    error={!!errors.tenNcc}
+                                    {...register('tenNcc')}
+                                    helperText={errors.tenNcc?.message}
+                                />
+                            </Grid>
+                        </Grid>
+
+                        <Grid
+                            container
+                            spacing={2}
+                            alignItems='center'
+                            justifyContent='flex-start'
+                            mb={1}
+                        >
+                            <Grid item xs={5}>
+                                <InputLabel>
+                                    Địa chỉ:
+                                </InputLabel>
+                            </Grid>
+
+                            <Grid item xs={7}>
+                                <TextField
+                                    variant='standard'
+                                    sx={{...widthImport}}
+                                    error={!!errors.diaChi}
+                                    {...register('diaChi')}
+                                    helperText={errors.diaChi?.message}
+                                />
+                            </Grid>
+
+                        </Grid>
+                    </Grid>
+                </Grid>
             </DialogContent>
 
             <DialogActions>

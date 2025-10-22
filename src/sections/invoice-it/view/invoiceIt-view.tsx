@@ -170,8 +170,9 @@ export function InvoiceItView() {
       <ModalManager
         open={openCreate}
         handleClose={handleCloseCreate}
+        maxWidth="xl"
       >
-        <CreateXml handleClose={handleCloseCreate}/>
+        <CreateXml handleClose={handleCloseCreate} />
       </ModalManager>
 
     </DashboardContent >
