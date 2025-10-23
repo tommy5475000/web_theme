@@ -25,19 +25,22 @@ const createSchema = object({
         .required('Không để trống tên nhà cung cấp'),
     diaChi: string()
         .required("Không để trống địa chỉ"),
-    // noiDung: string()
-    //     .required("Không để trống nội dung"),
+    noiDung: string()
+        .required("Không để trống nội dung"),
     item: array().of(
-        object()
+        object({
+            danhSachHang:string().required("Không để trống nội dung hóa đơn"),
+            donGia: string()
+                .required("Không để trống đơn giá")
+                .matches(/^\d+$/, "Phải là số"),
+            sl: string()
+                .required("Không để trống số lượng")
+                .matches(/^\d+$/, "Phải là số"),
+            tyGia: string()
+                .matches(/^\d+$/, { message: "Phải là số", excludeEmptyString: true }),
+        }
+        )
     ),
-    donGia: string()
-        .required("Không để trống đơn giá")
-        .matches(/^\d+$/, "Phải là số"),
-    sl: string()
-        .required("Không để trống số lượng")
-        .matches(/^\d+$/, "Phải là số"),
-    tyGia: string()
-        .matches(/^\d+$/, { message: "Phải là số", excludeEmptyString: true }),
     hinhThuc: string(),
     stk: string(),
     caNhan: string(),
@@ -53,10 +56,12 @@ export function CreateXml({ handleClose }: CreateXmlProps) {
             ngayHd: "",
             tenNcc: "",
             diaChi: "",
-            sl: "",
-            donGia: "",
-            tyGia: "",
-            noiDung: "",
+            item:[{
+                danhSachHang:"",
+                sl: "",
+                donGia: "",
+                tyGia: "",}],       
+            noiDung:"",
             stk: "",
             caNhan: "",
             hinhThuc: "",
@@ -240,7 +245,7 @@ export function CreateXml({ handleClose }: CreateXmlProps) {
                             mb={1}
                         >
                             <Grid item xs={5}>
-                                <InputLabel> 
+                                <InputLabel>
                                     Nội dung hóa đơn:
                                 </InputLabel>
                             </Grid>
@@ -287,7 +292,7 @@ export function CreateXml({ handleClose }: CreateXmlProps) {
                             <Grid item xs={7}>
                                 <TextField
                                     variant='standard'
-                                    sx={{...widthImport}}
+                                    sx={{ ...widthImport }}
                                     error={!!errors.kyHieuHd}
                                     {...register('kyHieuHd')}
                                     helperText={errors.kyHieuHd?.message}
@@ -312,7 +317,7 @@ export function CreateXml({ handleClose }: CreateXmlProps) {
                             <Grid item xs={7}>
                                 <TextField
                                     variant='standard'
-                                    sx={{...widthImport}}
+                                    sx={{ ...widthImport }}
                                     error={!!errors.tenNcc}
                                     {...register('tenNcc')}
                                     helperText={errors.tenNcc?.message}
@@ -336,7 +341,7 @@ export function CreateXml({ handleClose }: CreateXmlProps) {
                             <Grid item xs={7}>
                                 <TextField
                                     variant='standard'
-                                    sx={{...widthImport}}
+                                    sx={{ ...widthImport }}
                                     error={!!errors.diaChi}
                                     {...register('diaChi')}
                                     helperText={errors.diaChi?.message}
