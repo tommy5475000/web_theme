@@ -45,7 +45,9 @@ export function InvoiceTableToolbar({ numSelected, filterName, onFilterName }: I
             )}
             {numSelected > 0 ? (
                 <Tooltip title="Delete">
-                    <IconButton>
+                    <IconButton 
+                       
+                    >
                         <Iconify icon="solar:trash-bin-trash-bold" />
                     </IconButton>
                 </Tooltip>

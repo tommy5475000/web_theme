@@ -6,15 +6,17 @@ import { Box, Card, Table, TableBody, TableCell, TableContainer, TablePagination
 import { getInvoiceXlm } from "src/apis/it";
 import { DashboardContent } from "src/layouts/dashboard";
 
+import { showAlert } from "src/components/alert";
 import { ModalManager } from "src/components/modal";
 import { ButtonGroup } from "src/components/button";
 import { Scrollbar } from "src/components/scrollbar";
-import { headLabel } from "src/components/Item/item";
 import { handleExportData } from "src/components/export";
+import { headLabel, itemHinhThucHoaDon } from "src/components/Item/item";
 
 import { TableNoData } from "src/sections/user/table-no-data";
 import { TableEmptyRows } from "src/sections/user/table-empty-rows";
 
+import { EditXml } from "../editXml";
 import { ImportXml } from "../importXml";
 import { CreateXml } from "../createXml";
 import { InvoiceTableHead } from "../invoice-table-head";
@@ -28,6 +30,8 @@ export function InvoiceItView() {
   const [filterName, setFilterName] = useState("")
   const [openImport, setOpenImport] = useState(false)
   const [openCreate, setOpenCreate] = useState(false)
+  const [openEdit, setOpenEdit] = useState(false)
+  const [rowSelect, setRowSelect] = useState<InvoiceProps | null>(null);
 
   const handleOpenCreate = () => {
     setOpenCreate(true)
@@ -36,12 +40,29 @@ export function InvoiceItView() {
   const handleCloseCreate = () => {
     setOpenCreate(false)
   }
+
   const handleOpenImport = () => {
     setOpenImport(true)
   }
-
   const handleCloseImport = () => {
     setOpenImport(false)
+  }
+
+  const handleOpenEdit = (row: InvoiceProps) => {
+    if (table.selected.length===0) {
+      showAlert({type:'error',message:'Vui lòng chọn 1 dòng muốn sửa'})
+      return
+    }
+    if (table.selected.length>1) {
+      showAlert({type:'error',message:'Vui lòng chọn 1 dòng'})
+      return
+    }
+    setRowSelect(rowSelect)
+    setOpenEdit(true)
+  }
+  const handleCloseEdit = () => {
+    setOpenEdit(false)
+    setRowSelect(null)
   }
 
   const { data: dataXml = [] } = useQuery<InvoiceProps[]>({
@@ -102,7 +123,7 @@ export function InvoiceItView() {
                 onSelectAllRows={(checked) =>
                   table.onSelectAllRows(
                     checked,
-                    dataFiltered.map((item) => item.soHd)
+                    dataFiltered.map((item) => item.id)
                   )
                 }
                 headLabel={headLabel}
@@ -115,10 +136,11 @@ export function InvoiceItView() {
                   )
                   .map((row) => (
                     <InvoiceTableRow
-                      key={row.soHd}
+                      key={row.id}
                       row={row}
-                      selected={table.selected.includes(row.soHd)}
-                      onSelectRow={() => table.onSelectRow(row.soHd)}
+                      selected={table.selected.includes(row.id)}
+                      onSelectRow={() => { table.onSelectRow(row.id); setRowSelect(row) }}
+                      onEditRow={() => handleOpenEdit(row)}
                     />
                   ))}
 
@@ -153,7 +175,7 @@ export function InvoiceItView() {
           count={dataXml.length}
           rowsPerPage={table.rowsPerPage}
           onPageChange={table.onChangePage}
-          rowsPerPageOptions={[10, 50, 100]}
+          rowsPerPageOptions={[30, 50, 100]}
           onRowsPerPageChange={table.onChangeRowsPerPage}
         />
       </Card>
@@ -172,7 +194,18 @@ export function InvoiceItView() {
         handleClose={handleCloseCreate}
         maxWidth="xl"
       >
-        <CreateXml handleClose={handleCloseCreate} />
+        <CreateXml handleClose={handleCloseCreate} dataLH={itemHinhThucHoaDon} />
+      </ModalManager>
+
+      <ModalManager
+        open={openEdit}
+        handleClose={handleCloseEdit}
+        maxWidth="lg"
+      >
+        {rowSelect && (
+          <EditXml handleClose={handleCloseEdit} dataLH={itemHinhThucHoaDon} rowSelect={rowSelect} />
+
+        )}
       </ModalManager>
 
     </DashboardContent >
@@ -185,8 +218,8 @@ export function InvoiceItView() {
 export function useTable() {
   const [page, setPage] = useState(0);
   const [orderBy, setOrderBy] = useState('ngayHd');
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [selected, setSelected] = useState<string[]>([]);
+  const [rowsPerPage, setRowsPerPage] = useState(30);
+  const [selected, setSelected] = useState<number[]>([]);
   const [order, setOrder] = useState<'desc' | 'asc'>('desc');
 
   const onSort = useCallback(
@@ -198,7 +231,7 @@ export function useTable() {
     [order, orderBy]
   );
 
-  const onSelectAllRows = useCallback((checked: boolean, newSelecteds: string[]) => {
+  const onSelectAllRows = useCallback((checked: boolean, newSelecteds: number[]) => {
     if (checked) {
       setSelected(newSelecteds);
       return;
@@ -207,7 +240,7 @@ export function useTable() {
   }, []);
 
   const onSelectRow = useCallback(
-    (inputValue: string) => {
+    (inputValue: number) => {
       const newSelected = selected.includes(inputValue)
         ? selected.filter((value) => value !== inputValue)
         : [...selected, inputValue];
@@ -227,7 +260,7 @@ export function useTable() {
 
   const onChangeRowsPerPage = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      setRowsPerPage(parseInt(event.target.value, 10));
+      setRowsPerPage(parseInt(event.target.value, 30));
       onResetPage();
     },
     [onResetPage]

@@ -1,16 +1,16 @@
 import { useCallback, useState } from "react";
 
-import {  Checkbox, IconButton, MenuItem, menuItemClasses, MenuList, Popover, TableCell, TableRow } from "@mui/material";
+import { Checkbox, IconButton, MenuItem, menuItemClasses, MenuList, Popover, TableCell, TableRow } from "@mui/material";
 
 import { Iconify } from "src/components/iconify";
 
-
 export type InvoiceProps = {
+    id: number,
     soHd: string,
     kyHieuHd: string,
     ngayHd: string,
     loaiHinh: string,
-    tenNcc:string,
+    tenNcc: string,
     noiDung: string,
     tienThue: number,
     tongTien: number,
@@ -22,16 +22,26 @@ export type InvoiceProps = {
     nganHang: string,
     webSite: string,
     soTienBangChu: string,
-    tiGia: number,
+    tyGia: number,
+    item:[{
+        danhSachHang:string,
+        sl:number,
+        donGia:number,
+        dvt:string,
+    }]
+    stk:string,
+    caNhan:string,
+    hinhThuc:string,
 }
 
 type InvoiceTableRowProps = {
-    row: InvoiceProps;
-    selected: boolean;
-    onSelectRow: () => void;
+    row: InvoiceProps,
+    selected: boolean,
+    onSelectRow: () => void,
+    onEditRow: () => void,
 }
 
-export function InvoiceTableRow({ row, selected, onSelectRow }: InvoiceTableRowProps) {
+export function InvoiceTableRow({ row, selected, onSelectRow, onEditRow }: InvoiceTableRowProps) {
     const [openPopover, setOpenPopover] = useState<HTMLButtonElement | null>(null);
 
     const handleOpenPopover = useCallback((event: React.MouseEvent<HTMLButtonElement>) => {
@@ -111,7 +121,10 @@ export function InvoiceTableRow({ row, selected, onSelectRow }: InvoiceTableRowP
                         },
                     }}
                 >
-                    <MenuItem onClick={handleClosePopover}>
+                    <MenuItem onClick={() => {
+                        handleClosePopover();
+                        onEditRow()
+                    }}>
                         <Iconify icon="solar:pen-bold" />
                         Edit
                     </MenuItem>
@@ -122,7 +135,7 @@ export function InvoiceTableRow({ row, selected, onSelectRow }: InvoiceTableRowP
                     </MenuItem>
 
                     <MenuItem onClick={handleClosePopover}>
-                        <Iconify icon="solar:print-bold"/>
+                        <Iconify icon="solar:print-bold" />
                         Print
                     </MenuItem>
 

@@ -24,8 +24,15 @@ export const showAlert = ({ type = "error", message }: swalTypeProps) => {
     });
 };
 
-export const capitalizeFirstLetter = ({ string }: capLetterTypeProps) =>
-    string
+// export const capitalizeFirstLetter = ({ string }: capLetterTypeProps) =>
+//     string
+//         .toLowerCase()
+//         .split(' ')
+//         .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+//          .join(' ');
+
+export const capitalizeFirstLetter = (text: string) =>
+    text
         .toLowerCase()
         .split(' ')
         .map(word => word.charAt(0).toUpperCase() + word.slice(1))

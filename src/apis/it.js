@@ -22,6 +22,8 @@ export const importXML = async (payload) => {
 
 // ----- TẠO HÓA ĐƠN ----- //
 export const createInv = async (payload) => {
+  console.log(payload);
+  
   try {
     const response = await fetcher.post("/invoice-it/createInv", payload);
     return response.data.content;
